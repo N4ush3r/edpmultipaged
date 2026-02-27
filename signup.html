@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Create Account</h1>
+        <form id="signupForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Sign Up</button>
+        </form>
+        <p id="message" class="error"></p>
+        <p>Already have an account? <a href="login.html">Log in</a></p>
+    </div>
+
+    <script type="module">
+        import { signup, getCurrentUser } from './auth.js';
+
+        if (getCurrentUser()) {
+            window.location.href = 'home.html';
+        }
+
+        const form = document.getElementById('signupForm');
+        const messageEl = document.getElementById('message');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const result = signup(username, email, password);
+
+            if (result.success) {
+                alert(result.message);
+                window.location.href = 'login.html';
+            } else {
+                messageEl.textContent = result.message;
+            }
+        });
+    </script>
+</body>
+</html>
