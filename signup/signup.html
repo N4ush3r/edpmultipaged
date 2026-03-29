@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
     <div class="login-container">
@@ -16,14 +16,14 @@
             <button type="submit">Sign Up</button>
         </form>
         <p id="message" class="error"></p>
-        <p>Already have an account? <a href="login.html">Log in</a></p>
+        <p>Already have an account? <a href="../login.html">Log in</a></p>
     </div>
 
     <script type="module">
-        import { signup, getCurrentUser } from './auth.js';
+        import { signup, getCurrentUser } from '../auth.js';
 
         if (getCurrentUser()) {
-            window.location.href = 'home.html';
+            window.location.href = '../home/home.html';
         }
 
         const form = document.getElementById('signupForm');
@@ -40,7 +40,7 @@
 
             if (result.success) {
                 alert(result.message);
-                window.location.href = 'login.html';
+                window.location.href = '../login.html';
             } else {
                 messageEl.textContent = result.message;
             }
