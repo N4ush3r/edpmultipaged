@@ -1,29 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
 html, body {
     height: 100%;
     margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'VT323', monospace;
+    letter-spacing: 1px;
 }
 
 body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(to bottom, #87CEEB, #1E90FF); 
+    background: linear-gradient(to bottom, #1a0b2e, #4b1d52, #cc5b5c); 
+    background-attachment: fixed;
 }
 
 .login-container {
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(20, 15, 30, 0.9);
     padding: 2rem 3rem;
-    border-radius: 15px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    border: 4px solid #e55c5c;
+    border-radius: 0;
+    box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.6);
     text-align: center;
     width: 90%;
     max-width: 350px;
+    color: #f0e6d2;
 }
 
 h1 {
-    color: #003F6B;
+    color: #ffb86c;
     margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 0px #000;
+    font-size: 2.8rem;
 }
 
 form {
@@ -34,38 +42,47 @@ form {
 
 input {
     padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 1rem;
+    border-radius: 0;
+    border: 2px solid #5a3e7a;
+    background: #110b1a;
+    color: #ffb86c;
+    font-size: 1.2rem;
+    font-family: 'VT323', monospace;
 }
 
 button {
     padding: 12px;
-    border: none;
-    border-radius: 8px;
-    background-color: #005A9C;
+    border: 2px solid #fff;
+    border-radius: 0;
+    background-color: #e55c5c;
     color: white;
-    font-size: 1.1rem;
+    font-size: 1.5rem;
+    font-family: 'VT323', monospace;
+    box-shadow: 4px 4px 0px #000;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: 0.1s;
 }
 
-button:hover {
-    background-color: #003F6B;
+button:active {
+    box-shadow: 0px 0px 0px #000;
+    transform: translate(4px, 4px);
 }
 
 .error {
-    color: red;
+    color: #ff5555;
+    text-shadow: 1px 1px 0px #000;
 }
 
 .user-card {
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid #ccc;
+    background: rgba(20, 15, 30, 0.9);
+    border: 2px solid #ffb86c;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 0;
     max-width: 400px;
     margin: 0 auto;
     text-align: left;
+    color: #f0e6d2;
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
 }
 
 #app {
