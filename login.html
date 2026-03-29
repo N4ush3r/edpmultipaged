@@ -15,14 +15,14 @@
             <button type="submit">Log In</button>
         </form>
         <p id="message" class="error"></p>
-        <p>No account? <a href="signup.html">Sign up</a></p>
+        <p>No account? <a href="./signup/signup.html">Sign up</a></p>
     </div>
 
     <script type="module">
         import { login, getCurrentUser } from './auth.js';
 
         if (getCurrentUser()) {
-            window.location.href = 'home.html';
+            window.location.href = './home/home.html';
         }
 
         const form = document.getElementById('loginForm');
@@ -37,7 +37,7 @@
             const result = login(email, password);
 
             if (result.success) {
-                window.location.href = 'home.html';
+                window.location.href = './home/home.html';
             } else {
                 messageEl.textContent = result.message;
             }
