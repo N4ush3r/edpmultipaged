@@ -22,25 +22,56 @@ const CART_KEY = 'app_cart';
 let products = [];
 let cart = loadCartFromStorage(); // Restore cart data from previous sessions
 
+// Cache DOM node references for performance
 const productsContainer = document.getElementById('productsContainer');
 const cartItemsContainer = document.getElementById('cartItemsContainer');
 const cartTotalEl = document.getElementById('cartTotal');
 const checkoutBtn = document.getElementById('checkoutBtn');
 const checkoutStatus = document.getElementById('checkoutStatus');
 
-// Bootstrap the application by fetching initial data and rendering the UI
-async function init() {
+// Fetches products from the API based on filters and re-renders the product grid
+async function fetchAndRenderProducts(filters = {}) {
+    const { minPrice, maxPrice } = filters;
+    const baseUrl = "https://api.escuelajs.co/api/v1/products/";
+    const params = new URLSearchParams({
+        categoryId: 21,
+        limit: 25,
+        offset: 0
+    });
+
+    if (minPrice) {
+        params.set('price_min', minPrice);
+    }
+    // The API doesn't handle Infinity, so only add maxPrice if it's a finite number
+    if (maxPrice && maxPrice !== Infinity) {
+        params.set('price_max', maxPrice);
+    }
+
+    const url = `${baseUrl}?${params.toString()}`;
+
+    const loadingEl = document.getElementById('loadingProducts');
+    loadingEl.style.display = 'block';
+    loadingEl.textContent = 'Loading products...';
+    productsContainer.innerHTML = ''; // Clear current products to show loading state
+
     try {
-        // Fetch product list from the remote API endpoint
-        const response = await fetch("https://api.escuelajs.co/api/v1/products/?categoryId=0&limit=25&offset=0");
+        const response = await fetch(url);
+        // Overwrite the global products array with the new list.
+        // This ensures `addToCart` works with the currently displayed items.
         products = await response.json();
-        document.getElementById('loadingProducts').style.display = 'none';
+        
+        loadingEl.style.display = 'none';
         renderProducts(products);
-        updateCartUI(); // Render the cart loaded from storage
     } catch (error) {
-        document.getElementById('loadingProducts').textContent = 'Failed to load products.';
+        loadingEl.textContent = 'Failed to load products.';
         console.error('Error fetching products:', error);
     }
+}
+
+// Bootstrap the application by fetching initial data and rendering the UI
+async function init() {
+    await fetchAndRenderProducts();
+    updateCartUI(); // Render the cart loaded from storage
 }
 
 function getCleanImage(imageInput) {
@@ -200,14 +231,13 @@ document.getElementById('applyFilterBtn').addEventListener('click', () => {
     const minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
     const maxPrice = parseFloat(document.getElementById('maxPrice').value) || Infinity;
     
-    const filtered = products.filter(p => p.price >= minPrice && p.price <= maxPrice);
-    renderProducts(filtered);
+    fetchAndRenderProducts({ minPrice, maxPrice });
 });
 
 document.getElementById('resetFilterBtn').addEventListener('click', () => {
     document.getElementById('minPrice').value = '';
     document.getElementById('maxPrice').value = '';
-    renderProducts(products);
+    fetchAndRenderProducts();
 });
 
 // Manage the checkout flow, payload creation, and simulated API request
