@@ -1,6 +1,6 @@
 import { getCurrentUser, logout } from '../auth.js';
 
-// --- Authentication Check ---
+// Verify user session; redirect to login if no active user is found
 const currentUser = getCurrentUser();
 
 if (!currentUser) {
@@ -17,25 +17,27 @@ if (!currentUser) {
     });
 }
 
-// --- State Management ---
+// Initialize global variables for application data and retrieve saved cart
+const CART_KEY = 'app_cart';
 let products = [];
-let cart = []; // Cart array containing: { id, name, price, quantity }
+let cart = loadCartFromStorage(); // Restore cart data from previous sessions
 
-// --- DOM Elements ---
+// Cache DOM node references for performance
 const productsContainer = document.getElementById('productsContainer');
 const cartItemsContainer = document.getElementById('cartItemsContainer');
 const cartTotalEl = document.getElementById('cartTotal');
 const checkoutBtn = document.getElementById('checkoutBtn');
 const checkoutStatus = document.getElementById('checkoutStatus');
 
-// --- Initialize App ---
+// Bootstrap the application by fetching initial data and rendering the UI
 async function init() {
     try {
-        // Fetch min 25 products from Category 1 (Clothes)
+        // Fetch product list from the remote API endpoint
         const response = await fetch("https://api.escuelajs.co/api/v1/products/?categoryId=1&limit=25&offset=0");
         products = await response.json();
         document.getElementById('loadingProducts').style.display = 'none';
         renderProducts(products);
+        updateCartUI(); // Render the cart loaded from storage
     } catch (error) {
         document.getElementById('loadingProducts').textContent = 'Failed to load products.';
         console.error('Error fetching products:', error);
@@ -48,15 +50,12 @@ function getCleanImage(imageInput) {
 
     const stringifiedInput = typeof imageInput === 'string' ? imageInput : JSON.stringify(imageInput);
     
-    // Tweak: Added a comma to the exclusion list so it stops if it hits a comma-separated list
+    // Extract the first valid image URL using a regular expression
     const match = stringifiedInput.match(/https?:\/\/[^"'\s\]\[,]+/);
 
     if (match) {
         const url = match[0];
         
-        // Log the extracted URL to your console so you can test it yourself!
-        console.log("Extracted URL from API:", url);
-
         if (url.includes('placeimg.com')) {
             return fallback;
         }
@@ -66,7 +65,17 @@ function getCleanImage(imageInput) {
     return fallback;
 }
 
-// --- Render UI ---
+// Functions handling the reading and writing of cart data to local storage
+function loadCartFromStorage() {
+    const cartJSON = localStorage.getItem(CART_KEY);
+    return cartJSON ? JSON.parse(cartJSON) : [];
+}
+
+function saveCartToStorage() {
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+}
+
+// Functions responsible for building and updating the DOM
 function renderProducts(itemsToRender) {
     productsContainer.innerHTML = '';
     if (itemsToRender.length === 0) {
@@ -81,8 +90,7 @@ function renderProducts(itemsToRender) {
         const imageUrl = getCleanImage(product.images);
         const fallbackUrl = 'https://tse1.mm.bing.net/th/id/OIP.Y9Keo9JVZtot43AUNQBhTAHaHa?rs=1&pid=ImgDetMain&o=7&rm=3';
 
-        // Note: I also updated the onerror attribute to use the safe fallbackUrl. 
-        // Previously, it used product.category.image, which is often just as broken as product.images.
+        // Build the HTML structure for each product, including fallback image handling
         card.innerHTML = `
             <img src="${imageUrl}" alt="${product.title}" referrerpolicy="no-referrer" crossorigin="anonymous" onerror="this.onerror=null; this.src='${fallbackUrl}'">
             <h4>${product.title}</h4>
@@ -97,8 +105,9 @@ function updateCartUI() {
     cartItemsContainer.innerHTML = '';
     
     if (cart.length === 0) {
-        cartItemsContainer.innerHTML = '<p style="color: #7f8c8d;">Cart is empty.</p>';
+        cartItemsContainer.innerHTML = '<p style="color: #1f6153;">Cart is empty.</p>';
         cartTotalEl.textContent = '$0.00';
+        checkoutBtn.disabled = true; // Prevent checkout when there are no items
         return;
     }
 
@@ -115,8 +124,8 @@ function updateCartUI() {
                 $${item.price}
             </div>
             <div class="cart-item-controls">
-                <button class="btn-decrease" data-id="${item.id}">-</button>
                 <span>${item.quantity}</span>
+                <button class="btn-decrease" data-id="${item.id}">-</button>
                 <button class="btn-increase" data-id="${item.id}">+</button>
                 <button class="btn-remove" data-id="${item.id}">x</button>
             </div>
@@ -125,53 +134,69 @@ function updateCartUI() {
     });
 
     cartTotalEl.textContent = `$${total.toFixed(2)}`;
+    checkoutBtn.disabled = false; // Allow checkout when items are present
 }
 
-// --- Event Listeners (Delegation) ---
+// Core business logic for cart manipulation (adding, updating, removing)
+function addToCart(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
 
-// Add to Cart
+    const existingItem = cart.find(item => item.id === productId);
+    if (existingItem) {
+        existingItem.quantity++;
+    } else {
+        cart.push({
+            id: product.id,
+            name: product.title,
+            price: product.price,
+            quantity: 1
+        });
+    }
+    saveCartToStorage();
+    updateCartUI();
+}
+
+function handleCartAction(productId, action) {
+    const itemIndex = cart.findIndex(item => item.id === productId);
+    if (itemIndex === -1) return;
+
+    switch (action) {
+        case 'increase':
+            cart[itemIndex].quantity++;
+            break;
+        case 'decrease':
+            cart[itemIndex].quantity--;
+            if (cart[itemIndex].quantity === 0) {
+                cart.splice(itemIndex, 1);
+            }
+            break;
+        case 'remove':
+            cart.splice(itemIndex, 1);
+            break;
+    }
+    saveCartToStorage();
+    updateCartUI();
+}
+
+// Bind user interactions to their respective handler functions
+
 productsContainer.addEventListener('click', (e) => {
     if (e.target.classList.contains('add-to-cart-btn')) {
         const id = parseInt(e.target.getAttribute('data-id'));
-        const product = products.find(p => p.id === id);
-        
-        const existingItem = cart.find(item => item.id === id);
-        if (existingItem) {
-            existingItem.quantity++;
-        } else {
-            cart.push({
-                id: product.id,
-                name: product.title,
-                price: product.price,
-                quantity: 1
-            });
-        }
-        updateCartUI();
+        addToCart(id);
     }
 });
 
-// Cart Operations (Increase, Decrease, Remove)
 cartItemsContainer.addEventListener('click', (e) => {
     const id = parseInt(e.target.getAttribute('data-id'));
     if (!id) return;
 
-    const itemIndex = cart.findIndex(item => item.id === id);
-    if (itemIndex === -1) return;
-
-    if (e.target.classList.contains('btn-increase')) {
-        cart[itemIndex].quantity++;
-    } else if (e.target.classList.contains('btn-decrease')) {
-        cart[itemIndex].quantity--;
-        if (cart[itemIndex].quantity === 0) {
-            cart.splice(itemIndex, 1);
-        }
-    } else if (e.target.classList.contains('btn-remove')) {
-        cart.splice(itemIndex, 1);
-    }
-    updateCartUI();
+    if (e.target.classList.contains('btn-increase')) handleCartAction(id, 'increase');
+    if (e.target.classList.contains('btn-decrease')) handleCartAction(id, 'decrease');
+    if (e.target.classList.contains('btn-remove')) handleCartAction(id, 'remove');
 });
 
-// Filter Products
 document.getElementById('applyFilterBtn').addEventListener('click', () => {
     const minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
     const maxPrice = parseFloat(document.getElementById('maxPrice').value) || Infinity;
@@ -186,22 +211,23 @@ document.getElementById('resetFilterBtn').addEventListener('click', () => {
     renderProducts(products);
 });
 
-// --- Checkout Process ---
+// Manage the checkout flow, payload creation, and simulated API request
 checkoutBtn.addEventListener('click', () => {
     if (cart.length === 0) {
         alert('Your cart is empty!');
         return;
     }
 
-    // UI Loading State
+    // Show loading indicators while processing
     checkoutBtn.disabled = true;
+    checkoutStatus.style.display = 'block';
     checkoutStatus.className = 'status-message status-loading';
     checkoutStatus.textContent = 'Processing checkout...';
 
-    // Simulate API request delay
+    // Mock an asynchronous network request with a timeout
     setTimeout(() => {
         try {
-            // Create Payload
+            // Construct the order details object
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const payload = {
                 user: {
@@ -213,30 +239,31 @@ checkoutBtn.addEventListener('click', () => {
                 date: new Date().toISOString()
             };
 
-            // Save to localStorage
+            // Append the new order to the existing orders in local storage
             const orders = JSON.parse(localStorage.getItem('app_orders') || '[]');
             orders.push(payload);
             localStorage.setItem('app_orders', JSON.stringify(orders));
 
-            // Success UI
+            // Update interface to reflect a successful transaction
             checkoutStatus.className = 'status-message status-success';
             checkoutStatus.textContent = 'Order placed successfully!';
             
-            // Reset Cart state
+            // Clear local cart array
             cart = [];
-            updateCartUI();
+            saveCartToStorage(); // Overwrite local storage cart with empty state
+            updateCartUI(); // Refresh cart display
         } catch (error) {
-            // Error handling UI
+            // Show failure message on error
             console.error("Checkout Error:", error);
             checkoutStatus.className = 'status-message status-error';
             checkoutStatus.textContent = 'Checkout failed. Please try again.';
         } finally {
             checkoutBtn.disabled = false;
-            // Hide status message after 4 seconds
+            // Automatically dismiss the notification toast
             setTimeout(() => { checkoutStatus.style.display = 'none'; }, 4000);
         }
-    }, 2000); // 2 second mock wait time
+    }, 2000); // Delay duration
 });
 
-// Boot up
+// Execute the main initialization function
 init();
