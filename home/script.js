@@ -22,7 +22,6 @@ const CART_KEY = 'app_cart';
 let products = [];
 let cart = loadCartFromStorage(); // Restore cart data from previous sessions
 
-// Cache DOM node references for performance
 const productsContainer = document.getElementById('productsContainer');
 const cartItemsContainer = document.getElementById('cartItemsContainer');
 const cartTotalEl = document.getElementById('cartTotal');
