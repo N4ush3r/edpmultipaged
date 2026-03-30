@@ -1,7 +1,7 @@
 /* Until Then Aesthetic Theme */
 body {
-    background: linear-gradient(180deg, #07131f 0%, #0f3830 100%);
-    color: #d6fcf0;
+    background: linear-gradient(180deg, #f4fcf9 0%, #dcf0ea 100%);
+    color: #07131f;
     font-family: 'VT323', monospace;
     margin: 0;
     min-height: 100vh;
@@ -10,7 +10,7 @@ body {
     display: block;
 }
 header {
-    background: rgba(10, 25, 40, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     border-bottom: 3px solid #148f77;
     padding: 1rem 2rem;
     display: flex;
@@ -19,7 +19,7 @@ header {
     box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 header h2 {
-    color: #48f0a3;
+    color: #148f77;
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -34,20 +34,20 @@ header h2 {
 .main-content { flex: 3; }
 .sidebar {
     flex: 1;
-    background: rgba(10, 25, 40, 0.85);
+    background: rgba(255, 255, 255, 0.95);
     border: 2px solid #148f77;
     padding: 15px;
-    box-shadow: 4px 4px 0px #094f41;
+    box-shadow: 4px 4px 0px #a3e4d7;
     height: fit-content;
     position: sticky;
     top: 20px;
 }
 .filters {
-    background: rgba(10, 25, 40, 0.85);
-    border: 2px solid #1f6153;
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #1abc9c;
     padding: 15px;
     margin-bottom: 20px;
-    box-shadow: 3px 3px 0px #094f41;
+    box-shadow: 3px 3px 0px #a3e4d7;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -57,9 +57,9 @@ header h2 {
     margin-top: 0;
 }
 input[type="number"] {
-    background: #031217;
-    border: 1px solid #148f77;
-    color: #48f0a3;
+    background: #ffffff;
+    border: 1px solid #1abc9c;
+    color: #07131f;
     font-family: 'VT323', monospace;
     font-size: 1.1rem;
     padding: 5px;
@@ -67,32 +67,34 @@ input[type="number"] {
     margin: 0;
 }
 button {
-    background: #148f77;
+    background: #1abc9c;
     color: #fff;
-    border: 2px solid #0e6352;
+    border: 2px solid #148f77;
     font-family: 'VT323', monospace;
     font-size: 1.2rem;
     cursor: pointer;
-    box-shadow: 2px 2px 0px #094f41;
+    box-shadow: 2px 2px 0px #0e6352;
     transition: all 0.2s;
     padding: 5px 15px;
 }
 button:hover {
-    background: #1abc9c;
+    background: #48f0a3;
+    color: #07131f;
     transform: translate(-2px, -2px);
-    box-shadow: 4px 4px 0px #094f41;
+    box-shadow: 4px 4px 0px #0e6352;
 }
 button:active {
     transform: translate(2px, 2px);
-    box-shadow: 0px 0px 0px #094f41;
+    box-shadow: 0px 0px 0px #0e6352;
 }
 #resetFilterBtn {
-    background: #2c3e50 !important;
-    border-color: #1a252f !important;
-    box-shadow: 2px 2px 0px #11181f !important;
+    background: #bdc3c7 !important;
+    border-color: #95a5a6 !important;
+    box-shadow: 2px 2px 0px #7f8c8d !important;
+    color: #2c3e50 !important;
 }
 #loadingProducts {
-    color: #48f0a3;
+    color: #148f77;
     font-size: 1.5rem;
     text-align: center;
     padding: 2rem;
@@ -105,17 +107,17 @@ button:active {
     gap: 20px;
 }
 .product-card {
-    background: rgba(15, 35, 55, 0.9);
-    border: 2px solid #1f6153;
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #1abc9c;
     padding: 15px;
     text-align: center;
-    box-shadow: 3px 3px 0px #094f41;
+    box-shadow: 3px 3px 0px #a3e4d7;
     transition: transform 0.2s;
 }
 .product-card:hover {
-    border-color: #48f0a3;
+    border-color: #148f77;
     transform: translateY(-3px);
-    box-shadow: 3px 6px 0px #094f41;
+    box-shadow: 3px 6px 0px #a3e4d7;
 }
 .product-card img {
     width: 100%;
@@ -126,13 +128,13 @@ button:active {
     image-rendering: pixelated;
 }
 .product-card h4 {
-    color: #48f0a3;
+    color: #0f3830;
     margin: 10px 0;
     font-size: 1.3rem;
 }
 .cart-item {
-    background: rgba(3, 18, 23, 0.8);
-    border: 1px solid #148f77;
+    background: #f4fcf9;
+    border: 1px solid #1abc9c;
     padding: 10px;
     margin-bottom: 10px;
     display: flex;
@@ -149,27 +151,29 @@ button:active {
     .btn-remove {
         background: #ff5e5e !important;
         border-color: #c0392b !important;
+        color: white !important;
     }
     .btn-remove:hover {
         background: #ff7878 !important;
+        color: white !important;
     }
 .btn-checkout {
     width: 100%;
-    background: #48f0a3;
-    color: #07131f;
+    background: #1abc9c;
+    color: #fff;
     font-weight: bold;
     font-size: 1.4rem;
     margin-top: 15px;
     border-color: #148f77;
-    box-shadow: 3px 3px 0px #094f41;
+    box-shadow: 3px 3px 0px #0e6352;
 }
-.btn-checkout:hover { background: #a3f7d1; }
+.btn-checkout:hover { background: #48f0a3; color: #07131f; }
 .status-message {
     margin-top: 10px;
     padding: 10px;
     font-weight: bold;
     text-align: center;
 }
-.status-success { color: #48f0a3; }
+.status-success { color: #148f77; }
 .status-error { color: #ff5e5e; }
 .status-loading { color: #5dade2; }

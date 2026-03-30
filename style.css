@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
 body {
-    background: linear-gradient(180deg, #07131f 0%, #0f3830 100%);
-    color: #d6fcf0;
+    background: linear-gradient(180deg, #f4fcf9 0%, #dcf0ea 100%);
+    color: #07131f;
     font-family: 'VT323', monospace;
     display: flex;
     justify-content: center;
@@ -13,9 +13,9 @@ body {
 }
 
 .login-container {
-    background: rgba(10, 25, 40, 0.85);
+    background: rgba(255, 255, 255, 0.95);
     border: 2px solid #148f77;
-    box-shadow: 4px 4px 0px #094f41;
+    box-shadow: 4px 4px 0px #a3e4d7;
     padding: 2.5rem;
     border-radius: 4px;
     width: 320px;
@@ -23,7 +23,7 @@ body {
 }
 
 .login-container h1 {
-    color: #48f0a3;
+    color: #148f77;
     text-transform: uppercase;
     letter-spacing: 2px;
     margin-top: 0;
@@ -40,54 +40,55 @@ input {
     width: 90%;
     padding: 10px;
     margin: 10px 0;
-    background: #031217;
-    border: 1px solid #1f6153;
-    color: #48f0a3;
+    background: #ffffff;
+    border: 1px solid #1abc9c;
+    color: #07131f;
     font-family: 'VT323', monospace;
     font-size: 1.2rem;
     border-radius: 2px;
 }
-input::placeholder { color: #1f6153; }
+input::placeholder { color: #7f8c8d; }
 input:focus {
     outline: none;
-    border-color: #48f0a3;
-    box-shadow: 0 0 5px rgba(72, 240, 163, 0.5);
+    border-color: #148f77;
+    box-shadow: 0 0 5px rgba(26, 188, 156, 0.5);
 }
 
 button {
     width: 100%;
     padding: 10px;
-    background: #148f77;
+    background: #1abc9c;
     color: white;
-    border: 2px solid #0e6352;
+    border: 2px solid #148f77;
     font-family: 'VT323', monospace;
     font-size: 1.3rem;
     cursor: pointer;
-    box-shadow: 2px 2px 0px #094f41;
+    box-shadow: 2px 2px 0px #0e6352;
     transition: all 0.2s;
     margin-top: 15px;
 }
 button:hover {
-    background: #1abc9c;
+    background: #48f0a3;
+    color: #07131f;
     transform: translate(-2px, -2px);
-    box-shadow: 4px 4px 0px #094f41;
+    box-shadow: 4px 4px 0px #0e6352;
 }
 
 button:active {
     transform: translate(2px, 2px);
-    box-shadow: 0px 0px 0px #094f41;
+    box-shadow: 0px 0px 0px #0e6352;
 }
 
 p { margin-top: 1.5rem; }
 a {
-    color: #48f0a3;
+    color: #148f77;
     text-decoration: none;
-    border-bottom: 1px dashed #48f0a3;
+    border-bottom: 1px dashed #148f77;
     transition: color 0.2s;
 }
 a:hover {
-    color: #a3f7d1;
-    border-bottom-color: #a3f7d1;
+    color: #1abc9c;
+    border-bottom-color: #1abc9c;
 }
 
 .error {
@@ -96,15 +97,15 @@ a:hover {
 }
 
 .user-card {
-    background: rgba(10, 25, 40, 0.85);
+    background: rgba(255, 255, 255, 0.95);
     border: 2px solid #148f77;
     padding: 20px;
     border-radius: 4px;
     max-width: 400px;
     margin: 0 auto;
     text-align: left;
-    color: #d6fcf0;
-    box-shadow: 4px 4px 0px #094f41;
+    color: #07131f;
+    box-shadow: 4px 4px 0px #a3e4d7;
 }
 
 #app {
