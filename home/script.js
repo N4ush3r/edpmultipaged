@@ -33,7 +33,7 @@ const checkoutStatus = document.getElementById('checkoutStatus');
 async function init() {
     try {
         // Fetch product list from the remote API endpoint
-        const response = await fetch("https://api.escuelajs.co/api/v1/products/?categoryId=1&limit=25&offset=0");
+        const response = await fetch("https://api.escuelajs.co/api/v1/products/?categoryId=0&limit=25&offset=0");
         products = await response.json();
         document.getElementById('loadingProducts').style.display = 'none';
         renderProducts(products);
